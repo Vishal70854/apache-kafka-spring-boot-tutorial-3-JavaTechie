@@ -1,0 +1,42 @@
+## Note : In windows cmd we have to use backward slash to move to a directory(downward or upward) i.e "\"
+## In Linux/MAC - we are using forward slash in terminal  i.e "/"
+## Also "." dot here represents the current directory in the cmd/terminal (for understanding purpose)
+## To terminate current operation(i.e zookeeper, kafka server, topic, producer, consumer) type (CTRL + C)
+
+===============================================================================================================
+https://www.conduktor.io/kafka/how-to-install-apache-kafka-on-windows-without-zookeeper-kraft-mode/
+
+## we can also use Apache Kafka without using Zookeeper(after version 2.3 we can use kafka without zookeeper in KRAFT mode)
+
+In KRAFT mode we don't need to use/run zookeeper
+KRAFT will be available in the .\config folder :
+path : C:\kafka_2.13-3.7.0\config\kraft
+
+Goto the official page of Apache Kafka and in QuickStart tab there will be an article for Kafka with KRaft
+link : https://kafka.apache.org/quickstart
+/*
+
+Kafka can be run using KRaft mode using local scripts and downloaded files or the docker image. Follow one of the sections below but not both to start the kafka server(windows).
+
+Using downloaded files
+1. Generate a Cluster UUID
+
+	$KAFKA_CLUSTER_ID="$(bin\windows\kafka-storage.bat random-uuid)"
+2. Format Log Directories
+
+ 	bin\windows\kafka-storage.bat format -t $KAFKA_CLUSTER_ID -c config\kraft\server.properties
+3. Start the Kafka Server
+
+	bin\windows\kafka-server-start.bat config\kraft\server.properties
+
+Hence we have started kafka without zookeeper(with using kraft and kafka server only steps mentioned above)
+
+*/
+
+Steps of Kafka with KRaft : 
+1. Generate a Cluster UUID (OPEN kafka folder path in command prompt (C:\kafka_2.13-3.7.0))
+2. Under .\bin.\windows folder we will pick kafka-storage.bat and we will format it with KAFKA_CLUSTER_ID and start the server.properties under .\config.\kraft.\ server.properties (under kraft folder since we are using kraft to run kafka without running zookeeper)
+3. Now we will run the kafka-server-start.bat file and also run the server.properties file under.\config.\kraft
+
+==================================================================================================================
+
