@@ -1,0 +1,141 @@
+# When we dont want to install any services of kafka(zookeeper, kafka server, or redis or any other services) then we can get if from docker to use those services via cloud
+
+## run zookeeper and kafka server using docker by creating docker-compose.yml file in IntelliJ idea and running docker desktop in background so as to use apache kafka without manually running zookeeper and kafka server in command prompt : 
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+we have created a folder in spring boot(intellij_Idea) named kafka-installation-using-docker and under that we have created a file "docker-compose.yml"
+
+We have provided docker compose up configurations for zookeeper and kafka mentioned below:
+
+/*
+
+version : '3.7'
+
+services:
+  # docker compose up zookeeper
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+  # docker compose up zookeeper
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+
+*/
+
+open docker desktop and run the below command to run default docker container in the background
+/*
+
+	docker run -d -p 80:80 docker/getting-started
+
+You'll notice a few flags being used. Here's some more info on them:
+
+-d - run the container in detached mode (in the background)
+-p 80:80 - map port 80 of the host to port 80 in the container
+docker/getting-started - the image to use
+
+*/
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+now open command prompt for the above folder location(kafka-installation-using-docker where docker-compose.yml file is present) and type the below command to run docker-componse.yml file so that it could start configuration of zookeeper and kafka server mentioned in .yml file :
+  
+/*
+
+		docker compose -f docker-compose.yml up -d
+
+Here -f means give the file name
+-d means run docker in the background
+*/
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Once you run the above command in cmd in the above mentioned path to run docker-compose.yml file in background	
+	you will be able to see in the command prompt mentioned below:
+/*
+
+	✔ Network kafka-installation-using-docker_default  Created                               0.9s
+ 	✔ Container kafka                                  Started                               4.9s
+ 	✔ Container zookeeper                              Started
+*/
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+To check which all images are running in your docker 
+	Type : docker images
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+To verify whether the 2 instances(zookeeper and kafka server in docker) are running or not
+
+	Type : docker ps
+
+you will find the running instances list with details mentioned which includes containerId,containerName etc.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+now we will run the below command to see whether our kafka container is up and running or not
+
+	 docker exec -it kafka //bin//sh
+
+here kafka is the name of the container(we can give the container id of kafka container)
+
+type ls
+type cd opt
+type ls : you will find the kafka binary distribution folder in your folder
+type cd <kafka distribution name> (copy it and paste)
+type pwd (to check the current directory) --  it will be something similar to /opt/kafka_2.13-2.8.1
+	now we will go inside bin directory
+type cd bin
+type ls and you will be able to see all the .sh file available in you bin directory for kafka
+
+from here we will create kafka topics, kafka producer to produce messages and kafka consumer to consume messages from topic
+we will check all the messages in kafka offset explorer.
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+now we wil create kafka topic using docker in cmd(create topic named quickstart)
+type : 
+	kafka-topics.sh --create --topic quickstart --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1
+
+kafka topic named quickstart is created
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+create kafka console producer to produce messages to kafka topic named quickstart
+
+type : 
+
+	kafka-console-producer.sh --topic quickstart --bootstrap-server localhost:9092
+
+kafka producer is created and you will be able to produce messages
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+now create kafka console consumer to consume messages from kafka topic named quickstart
+
+open a new terminal in powershell/cmd and type 
+
+	docker exec -it kafka //bin//sh
+
+here kafka is the name of the container(we can give the container id of kafka container)
+
+type ls
+type cd opt
+type ls : you will find the kafka binary distribution folder in your folder
+type cd <kafka distribution name> (copy it and paste)
+type pwd (to check the current directory) --  it will be something similar to /opt/kafka_2.13-2.8.1
+	now we will go inside bin directory
+type cd bin
+type ls and you will be able to see all the .sh file available in you bin directory for kafka
+
+Now we will create kafka console consumer to consume quickstart topic messages
+
+type : 
+	kafka-console-consumer.sh --topic quickstart --from-beginning --bootstrap-server localhost:9092
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+we have successfully used docker to run zookeeper and kafka server without running both services manually in our local machine
