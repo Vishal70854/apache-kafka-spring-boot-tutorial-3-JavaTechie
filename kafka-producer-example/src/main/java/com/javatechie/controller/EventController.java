@@ -17,7 +17,7 @@ public class EventController {
     @GetMapping("/publish/{messsage}")
     public ResponseEntity<?> publishMessage(@PathVariable String messsage){
         try {
-            for(int i = 0; i < 10000; i++){ // run 10000 times to test whether our data goes to different partitions or not
+            for(int i = 0; i < 100; i++){ // run 10000 times to test whether our data goes to different partitions or not
                 publisher.sendMessageToTopic(messsage + " : " +i); // call the sendMessageToTopic(message) to publish message to the topic
             }
             return ResponseEntity.ok("Message Published Successfully...");
