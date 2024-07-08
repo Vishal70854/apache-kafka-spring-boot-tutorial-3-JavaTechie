@@ -1,9 +1,15 @@
 ## below configuration is for application.yml for kafka
 spring:
   kafka:
+    producer:
+      # remove bootstrap server because it will fetch it from docker
+      # configure JsonSerializer so that we can use json object as value to kafka topic
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
       bootstrap-servers: localhost:9092
       group-id: jt-group
+      auto-offset-reset: latest
       # configure JsonDeserializer so that we can deserialize json object as String value from kafka topic
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
@@ -13,8 +19,3 @@ spring:
           json:
             trusted:
               packages: com.javatechie.dto
-      auto-offset-reset: latest
-
-
-server:
-  port: 9292

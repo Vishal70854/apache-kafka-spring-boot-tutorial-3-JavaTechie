@@ -1,11 +1,9 @@
-server:
-  port: 9191
 
 ## below configuration is for application.yml for kafka
 spring:
   kafka:
     producer:
-      bootstrap-servers: localhost:9092
+      # remove bootstrap server because it will fetch it from docker
       # configure JsonSerializer so that we can use json object as value to kafka topic
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
